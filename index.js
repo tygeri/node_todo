@@ -1,3 +1,4 @@
+// Example of Non Blocking IO
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
@@ -7,10 +8,11 @@ const TodoTask = require("./models/TodoTask");
 
 dotenv.config(); // Connect to database
 
+// Example of 'routing' concept
 app.use("/public", express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-//connection to db
+//connection to db uses Authentication
 mongoose.connect(process.env.DB_CONNECT).then(() => {
     console.log("Connected to db!");
     app.listen(3000, () => console.log("Server Up and running"));
@@ -48,6 +50,7 @@ app.route("/edit/:id").get((req, res) => {
     })
     .post((req, res) => {
     const id = req.params.id;
+    // collections and documents
     TodoTask.findByIdAndUpdate(id, { content: req.body.content }, err => {
     if (err) return res.send(500, err);
     res.redirect("/");
@@ -58,6 +61,7 @@ app.route("/edit/:id").get((req, res) => {
 //DELETE
 app.route("/remove/:id").get((req, res) => {
     const id = req.params.id;
+    // collections and documents
     TodoTask.findByIdAndRemove(id, err => {
     if (err) return res.send(500, err);
     res.redirect("/");
